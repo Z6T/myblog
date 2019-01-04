@@ -1,5 +1,6 @@
 const express = require('express'),
     User = require('../models/user'),
+    Article = require('../models/article'),
     scret_config = require('../common/screte_config'),
     router = express.Router(),
     md5 = require('md5'),
@@ -79,5 +80,96 @@ router.post('/checktoken', (req, res) => {
         }
     })
 })
+
+// 查询文章
+router.get('/queryList', async (req, res) => {
+    var body = req.query
+    const data = await Article.find(body)
+    console.log(data)
+    if (data) {
+        res.json({
+            error_code: 0,
+            data
+        })
+    } else {
+        res.json({
+            error_code: 1,
+            msg: '暂无数据'
+        })
+    }
+})
+// 查询文章
+router.get('/editOfQuery', async (req, res) => {
+    var body = req.query
+    const data = await Article.findOne(body)
+    if (data) {
+        res.json({
+            error_code: 0,
+            data
+        })
+    } else {
+        res.json({
+            error_code: 1,
+            msg: '暂无数据'
+        })
+    }
+})
+// 新建文章
+router.post('/addArticle', async (req, res) => {
+    var body = req.body
+    const newArticle = await new Article(body).save()
+    if (newArticle) {
+        res.json({
+            error_code: 0,
+            msg: '发布成功'
+        })
+    } else {
+        res.json({
+            error_code: 1,
+            msg: '发布失败'
+        })
+    }
+})
+// 保存文章
+router.post('/saveArticle', async (req, res) => {
+    var body = req.body
+    const data = await Article.update({ _id: body._id }, body);
+    console.log(data)
+    if (data.ok === 1 && data.nModified >= 1) {
+        res.json({
+            error_code: 0,
+            msg: '修改成功'
+        })
+    } else if (data.nModified === 0) {
+        res.json({
+            error_code: 1,
+            msg: '数据未改变,无需修改'
+        })
+    } else {
+        res.json({
+            error_code: 1,
+            msg: '修改失败'
+        })
+    }
+})
+// 删除文章
+router.post('/deleteArticle', async (req, res) => {
+    var body = req.body
+    const data = await Article.remove(body)
+    if (data.n !== 0 && data.ok === 1) {
+        res.json({
+            error_code: 0,
+            msg: '删除成功'
+        })
+    } else {
+        res.json({
+            error_code: 1,
+            msg: '删除失败'
+        })
+    }
+    console.log(data)
+})
+
+
 
 module.exports = router

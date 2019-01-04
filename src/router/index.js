@@ -12,7 +12,8 @@ import Aboutme from '@/components/client/pages/Aboutme'
 import AdminIndex from '@/components/admin/AdminIndex'
 import Loginpage from '@/components/admin/pages/Login'
 import Registerpage from '@/components/admin/pages/Register'
-import adminHome from '@/components/admin/pages/Home'
+import ArticleList from '@/components/admin/pages/ArticleList'
+import four04 from '@/components/admin/pages/four04'
 
 Vue.use(Router)
 
@@ -45,20 +46,24 @@ const router = new Router({
       name: 'AdminIndex',
       component: AdminIndex,
       children: [
-        { path: 'home', component: adminHome, name: 'adminHome' }
+        { path: 'articlelist', component: ArticleList, name: 'ArticleList' }
       ]
+    },
+    {
+      path: '*',
+      component: four04
     }
   ]
 })
 
 
 router.beforeEach((to, from, next) => {
-  debugger
   const token = localStorage.getItem('eleToken')
+  debugger
   // 不是登录和注册,并且token存在
-  if (to.fullPath !== '/zetalogin' && to.fullPath !== '/zetaregister' && !token) {
+  if (to.fullPath.startsWith('/admin') && !token) {
     next({ path: '/zetalogin' })
-  } else if (to.fullPath !== '/zetalogin' && to.fullPath !== '/zetaregister' && token) {
+  } else if (to.fullPath.startsWith('/admin') && token) {
     axios.post('/api/checktoken', { token }).then((data) => {
       var data = data.data
       if (data && data.token_errcode === 0) {
@@ -70,6 +75,7 @@ router.beforeEach((to, from, next) => {
   } else {
     next()
   }
+
 });
 
 export default router

@@ -5,7 +5,6 @@
 <template>
   <div>
     <Headnav></Headnav>
-    <router-view></router-view>
   </div>
 </template>
 <script>

@@ -53,7 +53,7 @@ export default {
               type: "success"
             });
             setTimeout(() => {
-              this.$router.push("admin/home");
+              this.$router.push("admin/articlelist");
             }, 100);
           } else if (data.error_code === 1) {
             this.$message({

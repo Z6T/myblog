@@ -1,33 +1,45 @@
  <template>
-  <el-menu
-    :default-active="activeIndex2"
-    class="el-menu-demo"
-    mode="horizontal"
-    @select="handleSelect"
-    background-color="#545c64"
-    text-color="#fff"
-    active-text-color="#ffd04b"
-  >
-    <el-menu-item index="1" h>
-      <router-link to="/admin/home">列表</router-link>
-    </el-menu-item>
-    <el-submenu index="2">
-      <template slot="title">标签管理</template>
-      <el-menu-item index="2-1">选项1</el-menu-item>
-      <el-menu-item index="2-2">选项2</el-menu-item>
-      <el-menu-item index="2-3">选项3</el-menu-item>
-      <el-submenu index="2-4">
-        <template slot="title">选项4</template>
-        <el-menu-item index="2-4-1">选项1</el-menu-item>
-        <el-menu-item index="2-4-2">选项2</el-menu-item>
-        <el-menu-item index="2-4-3">选项3</el-menu-item>
-      </el-submenu>
-    </el-submenu>
-    <el-submenu index="3" style="float:right">
-      <template slot="title">admin</template>
-      <el-menu-item index="3-1" @click="logout">退出</el-menu-item>
-    </el-submenu>
-  </el-menu>
+  <el-container>
+    <el-container>
+      <el-aside width="200px">
+        <el-row>
+          <el-col :span="24">
+            <el-menu
+              default-active="2"
+              class="el-menu-vertical-demo"
+              background-color="#545c64"
+              @open="handleOpen"
+              @close="handleClose"
+              text-color="#fff"
+              active-text-color="#ffd04b"
+            >
+              <el-menu-item index="1">
+                <template slot="title">
+                  <i class="el-icon-service"></i>
+                  <span>用户管理</span>
+                </template>
+              </el-menu-item>
+              <router-link to="/admin/articlelist">
+                <el-menu-item index="/admin/articlelist">
+                  <template slot="title">
+                    <i class="el-icon-service"></i>
+                    <span>文章管理</span>
+                  </template>
+                </el-menu-item>
+              </router-link>
+              <el-submenu index="4">
+                <template slot="title">admin</template>
+                <el-menu-item index="1-4-1" @click="logout">退出</el-menu-item>
+              </el-submenu>
+            </el-menu>
+          </el-col>
+        </el-row>
+      </el-aside>
+      <el-main>
+        <router-view></router-view>
+      </el-main>
+    </el-container>
+  </el-container>
 </template>
 <script>
 export default {
@@ -41,6 +53,12 @@ export default {
     logout() {
       localStorage.removeItem("eleToken");
       location.reload();
+    },
+    handleOpen(key, keyPath) {
+      console.log(key, keyPath);
+    },
+    handleClose(key, keyPath) {
+      console.log(key, keyPath);
     }
   }
 };
