@@ -87,7 +87,6 @@ router.post('/checktoken', (req, res) => {
 router.get('/queryList', async (req, res) => {
     var body = req.query
     const data = await Article.find(body)
-    console.log(data)
     if (data) {
         res.json({
             error_code: 0,
@@ -137,7 +136,6 @@ router.post('/addArticle', async (req, res) => {
 router.post('/saveArticle', async (req, res) => {
     var body = req.body
     const data = await Article.update({ _id: body._id }, body);
-    console.log(data)
     if (data.ok === 1 && data.nModified >= 1) {
         res.json({
             error_code: 0,
@@ -170,14 +168,12 @@ router.post('/deleteArticle', async (req, res) => {
             msg: '删除失败'
         })
     }
-    console.log(data)
 })
 
 /*******************************文章API***************************************/
 // 新建文章分类
 router.post('/addArticleType', async (req, res) => {
     var body = req.body
-    console.log(body)
     const data = await new ArticleType(body).save()
     if (data) {
         res.json({
@@ -195,7 +191,6 @@ router.post('/addArticleType', async (req, res) => {
 router.get('/queryTypeList', async (req, res) => {
     var body = req.query
     const data = await ArticleType.find(body)
-    console.log(data)
     if (data) {
         res.json({
             error_code: 0,

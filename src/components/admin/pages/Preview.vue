@@ -44,4 +44,7 @@ import marked from 'marked'
     min-width: 470px;
     width: inherit;
 }
+.el-message-box__wrapper{
+  overflow: auto;
+}
 </style>
