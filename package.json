@@ -12,12 +12,15 @@
   },
   "dependencies": {
     "animate.css": "^3.7.0",
+    "axios": "^0.18.0",
     "element-ui": "^2.4.11",
+    "marked": "^0.6.0",
     "node-sass": "^4.11.0",
     "sass": "^1.15.2",
     "sass-loader": "^7.1.0",
     "vue": "^2.5.2",
-    "vue-router": "^3.0.1"
+    "vue-router": "^3.0.1",
+    "vuex": "^3.0.1"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.2",

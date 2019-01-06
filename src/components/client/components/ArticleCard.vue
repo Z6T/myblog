@@ -61,9 +61,9 @@ article {
     }
     .pubtime {
       background-size: 22px;
+      font-size: 16px;
       @media screen and (min-width: 800px) {
-        background: url("../../../assets/imgs/timer.png") no-repeat 0px -3px;
-        padding-left: 36px;
+        padding-left: 16px;
       }
       float: left;
       display: block;
@@ -81,26 +81,35 @@ article {
 }
 </style>
 <template>
-  <article>
-    <h1>
-      <a href="#">关于前端枚举的一点思考</a>
-    </h1>
-    <p
-      class="introduction"
-    >一、安装 npm i -g typescript 二、npm i -g typescript 二、使用 安装完TypeScript后，我们可以通过tsc指令来编译.ts文件，如： $ tsc inpm i -g typescript 二、使用 安装完TypeScript后，我们可以通过tsc指令来编译.ts文件，如： $ tsc i使用 安装完TypeScript后，我们可以通过tsc指令来编译.ts文件，如： $ tsc index.ts</p>
-    <div class="article-info">
-      <div class="tags">
-        <a href="#">typescript</a>
-        <a href="#">typescript</a>
+  <div>
+    <article v-for="item in articlelist" :key="item._id">
+      <router-link :to="'/archives/'+item._id">
+      <h1>
+        <a href="#">{{item.a_title}}</a>
+      </h1>
+      <p class="introduction">{{item.a_desc}}</p>
+      <div class="article-info">
+        <div class="tags">
+          <a href="#" v-for="(type,index) in item.a_type" :key="index">{{type}}</a>
+          <!-- <a href="#">typescript</a> -->
+        </div>
+        <div class="pubtime">
+          <i class="el-icon-time" style="font-size:18px;vertical-align: text-bottom"></i>
+          {{item.a_pubdate.substring(0,10)}}</div>
       </div>
-      <div class="pubtime">2018年12月17日</div>
-    </div>
-  </article>
+      </router-link>
+    </article>
+  </div>
 </template>
 <script>
 import animate from "animate.css";
 
 export default {
+  props: {
+    articlelist: {
+      type: Array
+    }
+  },
   data() {
     return {};
   },

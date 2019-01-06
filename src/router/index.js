@@ -8,6 +8,7 @@ import Series from '@/components/client/pages/Series'
 import Historylist from '@/components/client/pages/Historylist'
 import Record from '@/components/client/pages/Record'
 import Aboutme from '@/components/client/pages/Aboutme'
+import ArticleContent from '@/components/client/pages/ArticleContent'
 /*服务端所有程序 */
 import AdminIndex from '@/components/admin/AdminIndex'
 import Loginpage from '@/components/admin/pages/Login'
@@ -29,6 +30,7 @@ const router = new Router({
         { path: 'series', component: Series },
         { path: 'historylist', component: Historylist },
         { path: 'record', component: Record },
+        { path: 'archives/:id', component: ArticleContent },
         { path: 'aboutme', component: Aboutme }]
     },
     {
@@ -59,7 +61,6 @@ const router = new Router({
 
 router.beforeEach((to, from, next) => {
   const token = localStorage.getItem('eleToken')
-  debugger
   // 不是登录和注册,并且token存在
   if (to.fullPath.startsWith('/admin') && !token) {
     next({ path: '/zetalogin' })

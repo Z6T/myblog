@@ -14,7 +14,7 @@ const ArticleSchema = new Schema({
         required: true
     },
     a_pubdate: {
-        type: Date,
+        type: String,
         required: true
     },
     a_tags: {
@@ -22,7 +22,7 @@ const ArticleSchema = new Schema({
         required: true
     },
     a_type: {
-        type: String,
+        type: Array,
         required: true
     }
 })

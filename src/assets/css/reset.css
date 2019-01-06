@@ -3,8 +3,9 @@
    License: none (public domain)
 */
 body{
-    background: #E9EAED;
-    font-family: Microsoft Yahei !important;
+	background: #E9EAED;
+	font-family: STXihei, "华文细黑", Heiti, "黑体", "Microsoft YaHei", "微软雅黑", SimSun, "宋体", sans-serif  !important;
+    /* font-family: Microsoft Yahei !important; */
 }
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,

@@ -1,7 +1,7 @@
 <template>
   <div>
     <Headnav></Headnav>
-    <transition appear appear-active-class="animated swing">>
+    <transition appear appear-active-class="animated swing" >
       <router-view></router-view>
     </transition>
   </div>
@@ -16,7 +16,10 @@ export default {
       msg: "Welcome to Your Vue.js App"
     };
   },
-  components: { Headnav }
+  components: { Headnav },
+  created(){
+    
+  }
 };
 </script>
 

@@ -2,7 +2,7 @@
 @media screen and (min-width: 800px) {
   .wrapper {
     width: 100%;
-    background: #333;
+    background: #622954;
     &:before {
       background: #000
         linear-gradient(
@@ -37,7 +37,7 @@
   .nav_list {
     width: 100%;
     box-sizing: border-box;
-    background-color: rgb(51, 51, 51);
+    background-color: #622954;
     padding: 10px;
     padding-left: 150px;
     li {

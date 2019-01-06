@@ -16,7 +16,12 @@ const editOfQuery = data => ajax('/editOfQuery', data, 'get')
 // 数据保存
 const saveArticle = data => ajax('/saveArticle', data, 'post')
 
+// 添加分类
+const addArticleType = data => ajax('/addArticleType', data, 'post')
+// 查询分类
+const queryTypeList = data => ajax('/queryTypeList', data, 'get')
+
 var apis = {
-    register, login, addArticle, deleteArticle, queryList, editOfQuery, saveArticle
+    register, login, addArticle, deleteArticle, queryList, editOfQuery, saveArticle,addArticleType,queryTypeList
 }
 export default apis;

@@ -17,9 +17,20 @@
   position: absolute;
   width: 78%;
   padding-top: 20px;
-  padding-left: 80px;
-  padding-right: 80px;
+  padding-left: 30px;
+  padding-right: 30px;
   background: #e9eaed;
+}
+
+.addtype {
+  font-size: 22px;
+  cursor: pointer;
+  margin: 0 10px;
+  vertical-align: middle;
+  height: 35px;
+  line-height: 35px;
+  width: 35px;
+  text-align: center;
 }
 </style>
 <template>
@@ -36,17 +47,26 @@
         <el-input v-model="form.a_title"></el-input>
       </el-form-item>
       <el-form-item label="文章分类">
-        <el-select v-model="form.a_type" placeholder="请选择活动区域">
-          <el-option label="区域一" value="shanghai"></el-option>
-          <el-option label="区域二" value="beijing"></el-option>
+        <el-select v-model="a_type" placeholder="请选择文章类型" >
+          <el-option
+            v-for="item in typetextarr"
+            :key="item._id"
+            :label="item.typetext"
+            :value="item.typetext"
+          ></el-option>
         </el-select>
+        <i class="el-icon-circle-plus-outline addtype" title="添加分类" @click="showAddType"></i>
+        <el-input
+          placeholder="添加分类"
+          style="width:inherit"
+          v-model="typetext"
+          v-if="showAddTypeinput"
+        ></el-input>
+        <el-button v-if="showAddTypeinput" size="small" round @click="addArticleType">确定添加</el-button>
       </el-form-item>
-      <el-form-item label="标签">
-        <el-input v-model="curtag" style="width:150px" @blur="addTag"></el-input>
-        <span style="margin-left:20px;color:#606266">
-          发布时间
-          :
-        </span>
+      <el-form-item label="发布时间">
+        <!-- <el-input v-model="curtag" style="width:150px" @blur="addTag"></el-input> -->
+        <!-- <span style="margin-left:20px;color:#606266">发布时间:</span> -->
         <div class="block" style="display:inline">
           <el-date-picker
             format="yyyy 年 MM 月 dd 日"
@@ -57,12 +77,8 @@
           ></el-date-picker>
         </div>
       </el-form-item>
-      <div
-        style="    clear: both;
-    overflow: hidden;
-    margin-bottom: 10px;padding-left: 81px;"
-      >
-        <div class="tag" v-if="form.a_tags.length" v-for="(item,key) in form.a_tags" :key="key">
+      <div style="clear: both;overflow: hidden;margin-bottom: 10px;padding-left: 81px;">
+        <div class="tag" v-if="form.a_type.length" v-for="(item,key) in form.a_type" :key="key">
           {{item}}
           <i
             class="el-tag__close el-icon-close"
@@ -75,7 +91,8 @@
         <el-input type="textarea" v-model="form.a_desc" rows="3" cols="20"></el-input>
       </el-form-item>
       <el-form-item label="文章内容">
-        <el-input type="textarea" v-model="form.a_content" rows="20" cols="20"></el-input>
+        <Preview :markdown_text="form.a_content"></Preview>
+        <el-input type="textarea" v-model="form.a_content" rows="7" cols="20"></el-input>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="publish">发布</el-button>
@@ -86,6 +103,7 @@
 </template>
 <script>
 import Table from "./Table";
+import Preview from "./Preview";
 
 export default {
   data() {
@@ -95,24 +113,32 @@ export default {
         a_title: "",
         // region: ["shanghai", "beijing"],
         a_desc: "",
-        a_type: "",
+        a_type: [],
         a_tags: [],
         a_pubdate: "",
         a_content: ""
       },
+      a_type: "",
       articlelist: [],
       showPanel: false,
-      isSave: false
+      showAddTypeinput: false,
+      isSave: false,
+      typetext: "",
+      typetextarr: []
     };
   },
-  components: { Table },
+  components: { Table, Preview },
   methods: {
     showFormPanel() {
+      Object.keys(this.form).map(
+        item =>
+          (this.form[item] = typeof this.form[item] === "string" ? "" : [])
+      );
       this.showPanel = true;
       document.body.style.background = "rgba(0,0,0,.3)";
     },
     removetag(tag) {
-      var tagarr = this.form.a_tags;
+      var tagarr = this.form.a_type;
       tagarr.splice(tagarr.indexOf(tag), 1);
     },
     addTag(e) {
@@ -186,6 +212,7 @@ export default {
               message: data.msg,
               type: "success"
             });
+            this.isSave = false;
             this.queryList(); // 重新查询
           } else if (data.error_code === 1) {
             this.$message({
@@ -201,10 +228,56 @@ export default {
       this.isSave = false;
       this.showPanel = false;
       document.body.style.background = "#e9eaed";
+    },
+    showAddType(e) {
+      this.showAddTypeinput = !this.showAddTypeinput;
+      if (e.target.className.indexOf("el-icon-circle-plus-outline") == -1) {
+        e.target.className = "el-icon-circle-plus-outline addtype";
+      } else {
+        e.target.className = "el-icon-remove-outline addtype";
+      }
+    },
+    addArticleType() {
+      this.apis
+        .addArticleType({ typetext: this.typetext })
+        .then(data => {
+          if (data.error_code === 0) {
+            this.$message({
+              showClose: true,
+              message: data.msg,
+              type: "success"
+            });
+            this.typetext = "";
+            this.queryTypeList();
+          } else if (data.error_code === 1) {
+            this.$message({
+              showClose: true,
+              message: data.msg,
+              type: "warning"
+            });
+          }
+        })
+        .catch(err => console.log(err));
+    },
+    queryTypeList() {
+      this.apis.queryTypeList().then(data => {
+        console.log(data.data);
+        if (data.data) {
+          this.typetextarr = data.data;
+        }
+      });
+    }
+  },
+  watch: {
+    a_type(curval, oldval) {
+      if (this.form.a_type.indexOf(this.a_type) > -1) return; // 不能重复
+      this.form.a_type.push(this.a_type);
+      console.log(this.form.a_type)
     }
   },
   created() {
     this.queryList();
+    this.queryTypeList();
   }
 };
 </script>

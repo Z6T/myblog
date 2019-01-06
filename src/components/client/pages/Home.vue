@@ -11,7 +11,7 @@
       width: 30%;
       height: 220px;
       float: right;
-      background-color: #333;
+      background-color: #622954;
       position: absolute;
       right: 0;
       top: 0;
@@ -86,26 +86,37 @@
         >
       </div>
     </div>
-    <div class="article-list">
+    <!-- <i class="el-icon-loading" v-if="!articlelist">Loading...</i> -->
+    <div class="article-list" >
       <Htitle>最新博文内容</Htitle>
-      <Article></Article>
-      <Article></Article>
-      <Article></Article>
-      <Article></Article>
-      <Article></Article>
-      <Article></Article>
-      <Article></Article>
-      <Article></Article>
+      <ArticleList :articlelist="articlelist"></ArticleList>
     </div>
   </div>
 </template>
 <script>
 import Htitle from "../components/Htitle";
-import Article from "../components/ArticleCard";
+import ArticleList from "../components/ArticleCard";
 export default {
   data() {
-    return {};
+    return {articlelist:[]};
   },
-  components: { Article, Htitle }
+  components: { ArticleList, Htitle },
+  methods:{
+    queryList() {
+      //   Object.keys(this.form).map(key => (obj[key] = ""));
+      this.apis
+        .queryList({})
+        .then(data => {
+          if (data.data) {
+            this.articlelist = data.data;
+          }
+        })
+        .catch(err => console.log(err));
+    },
+  },
+  created(){
+    debugger
+    this.queryList();
+  }
 };
 </script>

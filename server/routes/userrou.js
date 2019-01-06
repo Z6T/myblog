@@ -1,6 +1,7 @@
 const express = require('express'),
     User = require('../models/user'),
     Article = require('../models/article'),
+    ArticleType = require('../models/articletype'),
     scret_config = require('../common/screte_config'),
     router = express.Router(),
     md5 = require('md5'),
@@ -81,6 +82,7 @@ router.post('/checktoken', (req, res) => {
     })
 })
 
+/*******************************文章API***************************************/
 // 查询文章
 router.get('/queryList', async (req, res) => {
     var body = req.query
@@ -98,7 +100,7 @@ router.get('/queryList', async (req, res) => {
         })
     }
 })
-// 查询文章
+// 编辑时查询某一篇文章
 router.get('/editOfQuery', async (req, res) => {
     var body = req.query
     const data = await Article.findOne(body)
@@ -117,6 +119,7 @@ router.get('/editOfQuery', async (req, res) => {
 // 新建文章
 router.post('/addArticle', async (req, res) => {
     var body = req.body
+    delete body._id;
     const newArticle = await new Article(body).save()
     if (newArticle) {
         res.json({
@@ -170,6 +173,40 @@ router.post('/deleteArticle', async (req, res) => {
     console.log(data)
 })
 
-
+/*******************************文章API***************************************/
+// 新建文章分类
+router.post('/addArticleType', async (req, res) => {
+    var body = req.body
+    console.log(body)
+    const data = await new ArticleType(body).save()
+    if (data) {
+        res.json({
+            error_code: 0,
+            msg: '添加成功'
+        })
+    } else {
+        res.json({
+            error_code: 1,
+            msg: '添加失败'
+        })
+    }
+})
+// 查询文章分类
+router.get('/queryTypeList', async (req, res) => {
+    var body = req.query
+    const data = await ArticleType.find(body)
+    console.log(data)
+    if (data) {
+        res.json({
+            error_code: 0,
+            data
+        })
+    } else {
+        res.json({
+            error_code: 1,
+            msg: '暂无数据'
+        })
+    }
+})
 
 module.exports = router
