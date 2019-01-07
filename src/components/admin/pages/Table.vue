@@ -1,11 +1,12 @@
 <template>
   <el-table :data="articlelist" style="width: 100%">
+    <el-table-column label="序号" type="index" width="50"></el-table-column>
     <el-table-column label="文章标题" width="180">
       <template slot-scope="scope">
         <span style="margin-left: 10px">{{ scope.row.a_title }}</span>
       </template>
     </el-table-column>
-    <el-table-column label="文章描述" width="180"  show-overflow-tooltip>
+    <el-table-column label="文章描述" width="180" show-overflow-tooltip>
       <template slot-scope="scope">
         <i class="el-icon-document"></i>
         <span style="margin-left: 10px">{{ scope.row.a_desc }}</span>

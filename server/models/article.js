@@ -17,6 +17,9 @@ const ArticleSchema = new Schema({
         type: String,
         required: true
     },
+    a_zhuanti: {
+        type: String
+    },
     a_tags: {
         type: Array,
         required: true

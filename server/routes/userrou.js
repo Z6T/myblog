@@ -2,6 +2,7 @@ const express = require('express'),
     User = require('../models/user'),
     Article = require('../models/article'),
     ArticleType = require('../models/articletype'),
+    Zhuanti = require('../models/zhuanti'),
     scret_config = require('../common/screte_config'),
     router = express.Router(),
     md5 = require('md5'),
@@ -86,11 +87,16 @@ router.post('/checktoken', (req, res) => {
 // 查询文章
 router.get('/queryList', async (req, res) => {
     var body = req.query
-    const data = await Article.find(body)
+    var page = body.page
+    const data = await Article.find({}).skip((page - 1) * 10)
+        .limit(10)
+        .sort({ '_id': -1 });
+    const total = await Article.countDocuments({})
     if (data) {
         res.json({
             error_code: 0,
-            data
+            data,
+            total
         })
     } else {
         res.json({
@@ -118,7 +124,8 @@ router.get('/editOfQuery', async (req, res) => {
 // 新建文章
 router.post('/addArticle', async (req, res) => {
     var body = req.body
-    delete body._id;
+    console.log(body)
+    // delete body._id;
     const newArticle = await new Article(body).save()
     if (newArticle) {
         res.json({
@@ -135,7 +142,7 @@ router.post('/addArticle', async (req, res) => {
 // 保存文章
 router.post('/saveArticle', async (req, res) => {
     var body = req.body
-    const data = await Article.update({ _id: body._id }, body);
+    const data = await Article.updateOne({ _id: body._id }, body);
     if (data.ok === 1 && data.nModified >= 1) {
         res.json({
             error_code: 0,
@@ -170,6 +177,39 @@ router.post('/deleteArticle', async (req, res) => {
     }
 })
 
+// 时光轴页面API
+router.get('/timeline', async (req, res) => {
+    var body = req.query
+    const data = await Article.find(body).sort({ a_pubdate: -1 })
+    if (data) {
+        res.json({
+            error_code: 0,
+            data
+        })
+    } else {
+        res.json({
+            error_code: 1,
+            msg: '暂无数据'
+        })
+    }
+})
+// 分类目查询API
+router.get('/findBytype', async (req, res) => {
+    var body = req.query
+    const data = await Article.find(body).sort({ a_pubdate: -1 })
+    if (data) {
+        res.json({
+            error_code: 0,
+            data
+        })
+    } else {
+        res.json({
+            error_code: 1,
+            msg: '暂无数据'
+        })
+    }
+})
+
 /*******************************文章API***************************************/
 // 新建文章分类
 router.post('/addArticleType', async (req, res) => {
@@ -187,10 +227,76 @@ router.post('/addArticleType', async (req, res) => {
         })
     }
 })
+// 删除文章分类
+router.post('/removeArticleType', async (req, res) => {
+    var body = req.body
+    const data = await ArticleType.remove(body)
+    if (data.n !== 0 && data.ok === 1) {
+        res.json({
+            error_code: 0,
+            msg: '删除成功'
+        })
+    } else {
+        res.json({
+            error_code: 1,
+            msg: '删除失败'
+        })
+    }
+})
 // 查询文章分类
 router.get('/queryTypeList', async (req, res) => {
     var body = req.query
     const data = await ArticleType.find(body)
+    if (data) {
+        res.json({
+            error_code: 0,
+            data
+        })
+    } else {
+        res.json({
+            error_code: 1,
+            msg: '暂无数据'
+        })
+    }
+})
+/*******************************文章API***************************************/
+// 新建文章专题
+router.post('/addArticleZt', async (req, res) => {
+    var body = req.body
+    const data = await new Zhuanti(body).save()
+    if (data) {
+        res.json({
+            error_code: 0,
+            msg: '添加成功'
+        })
+    } else {
+        res.json({
+            error_code: 1,
+            msg: '添加失败'
+        })
+    }
+})
+// 删除文章专题
+router.post('/removeArticleZt', async (req, res) => {
+    var body = req.body
+    const data = await Zhuanti.remove(body)
+    if (data.n !== 0 && data.ok === 1) {
+        res.json({
+            error_code: 0,
+            msg: '删除成功'
+        })
+    } else {
+        res.json({
+            error_code: 1,
+            msg: '删除失败'
+        })
+    }
+})
+
+// 查询文章专题
+router.get('/queryZt', async (req, res) => {
+    var body = req.query
+    const data = await Zhuanti.find(body)
     if (data) {
         res.json({
             error_code: 0,

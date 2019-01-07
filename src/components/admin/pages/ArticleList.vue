@@ -47,7 +47,7 @@
         <el-input v-model="form.a_title"></el-input>
       </el-form-item>
       <el-form-item label="文章分类">
-        <el-select v-model="a_type" placeholder="请选择文章类型" >
+        <el-select v-model="a_type" placeholder="请选择文章类型">
           <el-option
             v-for="item in typetextarr"
             :key="item._id"
@@ -63,6 +63,21 @@
           v-if="showAddTypeinput"
         ></el-input>
         <el-button v-if="showAddTypeinput" size="small" round @click="addArticleType">确定添加</el-button>
+        <el-button v-if="showAddTypeinput" size="small" round @click="removeArticleType">小心删除</el-button>
+      </el-form-item>
+      <el-form-item label="专题收录">
+        <el-select v-model="form.a_zhuanti" placeholder="选择收录的专题">
+          <el-option
+            v-for="item in ztarr"
+            :key="item._id"
+            :label="item.typetext"
+            :value="item.typetext"
+          ></el-option>
+        </el-select>
+        <i class="el-icon-circle-plus-outline addtype" title="添加专题" @click="showAddZt"></i>
+        <el-input placeholder="添加专题" style="width:inherit" v-model="zttext" v-if="showAddTypeZt"></el-input>
+        <el-button v-if="showAddTypeZt" size="small" round @click="addArticleZt">确定添加</el-button>
+        <el-button v-if="showAddTypeZt" size="small" round @click="removeArticleZt">小心删除</el-button>
       </el-form-item>
       <el-form-item label="发布时间">
         <!-- <el-input v-model="curtag" style="width:150px" @blur="addTag"></el-input> -->
@@ -92,7 +107,7 @@
       </el-form-item>
       <el-form-item label="文章内容">
         <Preview :markdown_text="form.a_content"></Preview>
-        <el-input type="textarea" v-model="form.a_content" rows="7" cols="20"></el-input>
+        <el-input type="textarea" v-model="form.a_content" rows="13" cols="20"></el-input>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="publish">发布</el-button>
@@ -111,8 +126,8 @@ export default {
       curtag: "",
       form: {
         a_title: "",
-        // region: ["shanghai", "beijing"],
         a_desc: "",
+        a_zhuanti: "",
         a_type: [],
         a_tags: [],
         a_pubdate: "",
@@ -124,7 +139,10 @@ export default {
       showAddTypeinput: false,
       isSave: false,
       typetext: "",
-      typetextarr: []
+      zttext: "",
+      typetextarr: [],
+      ztarr: [],
+      showAddTypeZt: false
     };
   },
   components: { Table, Preview },
@@ -148,17 +166,26 @@ export default {
       this.curtag = "";
     },
     publish() {
+      debugger;
       //   this.form._id = "";
       this.showPanel = false;
       document.body.style.background = "#e9eaed";
       if (this.isSave) {
         this.save();
       } else {
+        var formdata = {
+          a_title: this.form.a_title,
+          a_desc: this.form.a_desc,
+          a_type: this.form.a_type,
+          a_tags: this.form.a_tags,
+          a_pubdate: this.form.a_pubdate,
+          a_content: this.form.a_content,
+          a_zhuanti: this.form.a_zhuanti
+        };
         this.apis
-          .addArticle(this.form)
+          .addArticle(formdata)
           .then(data => {
             if (data.error_code === 0) {
-              // 登录成功
               this.$message({
                 showClose: true,
                 message: data.msg,
@@ -259,6 +286,28 @@ export default {
         })
         .catch(err => console.log(err));
     },
+    removeArticleType() {
+      this.apis
+        .removeArticleType({ typetext: this.form.a_type })
+        .then(data => {
+          if (data.error_code === 0) {
+            this.$message({
+              showClose: true,
+              message: data.msg,
+              type: "success"
+            });
+            this.typetext = "";
+            this.queryTypeList();
+          } else if (data.error_code === 1) {
+            this.$message({
+              showClose: true,
+              message: data.msg,
+              type: "warning"
+            });
+          }
+        })
+        .catch(err => console.log(err));
+    },
     queryTypeList() {
       this.apis.queryTypeList().then(data => {
         console.log(data.data);
@@ -266,18 +315,79 @@ export default {
           this.typetextarr = data.data;
         }
       });
+    },
+    showAddZt(e) {
+      this.showAddTypeZt = !this.showAddTypeZt;
+      if (e.target.className.indexOf("el-icon-circle-plus-outline") == -1) {
+        e.target.className = "el-icon-circle-plus-outline addtype";
+      } else {
+        e.target.className = "el-icon-remove-outline addtype";
+      }
+    },
+    // 添加文字专题
+    addArticleZt() {
+      this.apis
+        .addArticleZt({ typetext: this.zttext })
+        .then(data => {
+          if (data.error_code === 0) {
+            this.$message({
+              showClose: true,
+              message: data.msg,
+              type: "success"
+            });
+            this.typetext = "";
+            this.queryZt();
+          } else if (data.error_code === 1) {
+            this.$message({
+              showClose: true,
+              message: data.msg,
+              type: "warning"
+            });
+          }
+        })
+        .catch(err => console.log(err));
+    },
+    queryZt() {
+      this.apis.queryZt().then(data => {
+        if (data.data) {
+          this.ztarr = data.data;
+        }
+      });
+    },
+    removeArticleZt() {
+      this.apis
+        .removeArticleZt({ typetext: this.form.a_zhuanti })
+        .then(data => {
+          if (data.error_code === 0) {
+            this.$message({
+              showClose: true,
+              message: data.msg,
+              type: "success"
+            });
+            this.typetext = "";
+            this.queryZt();
+          } else if (data.error_code === 1) {
+            this.$message({
+              showClose: true,
+              message: data.msg,
+              type: "warning"
+            });
+          }
+        })
+        .catch(err => console.log(err));
     }
   },
   watch: {
     a_type(curval, oldval) {
       if (this.form.a_type.indexOf(this.a_type) > -1) return; // 不能重复
       this.form.a_type.push(this.a_type);
-      console.log(this.form.a_type)
+      console.log(this.form.a_type);
     }
   },
   created() {
     this.queryList();
     this.queryTypeList();
+    this.queryZt(); // 查询专题
   }
 };
 </script>

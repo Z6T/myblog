@@ -82,21 +82,24 @@ article {
 </style>
 <template>
   <div>
-    <article v-for="item in articlelist" :key="item._id">
+    <div v-if="!articlelist.length" style="    padding: 10px 22px;
+    font-size: 17px;">暂无数据</div>
+    <article v-for="item in articlelist" :key="item._id" v-else>
       <router-link :to="'/archives/'+item._id">
-      <h1>
-        <a href="#">{{item.a_title}}</a>
-      </h1>
-      <p class="introduction">{{item.a_desc}}</p>
-      <div class="article-info">
-        <div class="tags">
-          <a href="#" v-for="(type,index) in item.a_type" :key="index">{{type}}</a>
-          <!-- <a href="#">typescript</a> -->
+        <h1>
+          <a href="#">{{item.a_title}}</a>
+        </h1>
+        <p class="introduction">{{item.a_desc}}</p>
+        <div class="article-info">
+          <div class="tags">
+            <a href="#" v-for="(type,index) in item.a_type" :key="index">{{type}}</a>
+            <!-- <a href="#">typescript</a> -->
+          </div>
+          <div class="pubtime">
+            <i class="el-icon-time" style="font-size:18px;vertical-align: text-bottom"></i>
+            {{item.a_pubdate.substring(0,10)}}
+          </div>
         </div>
-        <div class="pubtime">
-          <i class="el-icon-time" style="font-size:18px;vertical-align: text-bottom"></i>
-          {{item.a_pubdate.substring(0,10)}}</div>
-      </div>
       </router-link>
     </article>
   </div>
@@ -105,6 +108,7 @@ article {
 import animate from "animate.css";
 
 export default {
+  name: "ArticleList",
   props: {
     articlelist: {
       type: Array

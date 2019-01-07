@@ -18,10 +18,29 @@ const saveArticle = data => ajax('/saveArticle', data, 'post')
 
 // 添加分类
 const addArticleType = data => ajax('/addArticleType', data, 'post')
+
+// 删除分类
+const removeArticleType = data => ajax('/removeArticleType', data, 'post')
 // 查询分类
 const queryTypeList = data => ajax('/queryTypeList', data, 'get')
 
+// 删除专题
+const removeArticleZt = data => ajax('/removeArticleZt', data, 'post')
+// 添加专题
+const addArticleZt = data => ajax('/addArticleZt', data, 'post')
+// 查询分类
+const queryZt = data => ajax('/queryZt', data, 'get')
+
+// 时光轴
+const timeline = data => ajax('/timeline', data, 'get')
+// 分类查找
+const findBytype = data => ajax('/findBytype', data, 'get')
+
 var apis = {
-    register, login, addArticle, deleteArticle, queryList, editOfQuery, saveArticle,addArticleType,queryTypeList
+    register, login,
+    addArticle, deleteArticle,
+    queryList, editOfQuery,
+    saveArticle, addArticleType,
+    queryTypeList, addArticleZt, queryZt, removeArticleType, removeArticleZt, timeline, findBytype
 }
 export default apis;

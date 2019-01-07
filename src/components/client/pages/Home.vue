@@ -87,9 +87,19 @@
       </div>
     </div>
     <!-- <i class="el-icon-loading" v-if="!articlelist">Loading...</i> -->
-    <div class="article-list" >
+    <div class="article-list">
       <Htitle>最新博文内容</Htitle>
       <ArticleList :articlelist="articlelist"></ArticleList>
+      <div class="block" style="padding:20px">
+        <el-pagination
+          @size-change="handleCurrentChange"
+          @current-change="handleCurrentChange"
+          :current-page.sync="currentPage3"
+          :page-size="10"
+          layout="prev, pager, next, jumper"
+          :total="total"
+        ></el-pagination>
+      </div>
     </div>
   </div>
 </template>
@@ -98,24 +108,29 @@ import Htitle from "../components/Htitle";
 import ArticleList from "../components/ArticleCard";
 export default {
   data() {
-    return {articlelist:[]};
+    return { articlelist: [], currentPage3: 1, total: 0 };
   },
   components: { ArticleList, Htitle },
-  methods:{
+  methods: {
     queryList() {
-      //   Object.keys(this.form).map(key => (obj[key] = ""));
       this.apis
-        .queryList({})
+        .queryList({
+          page: this.currentPage3
+        })
         .then(data => {
           if (data.data) {
             this.articlelist = data.data;
+            this.total = data.total;
           }
         })
         .catch(err => console.log(err));
     },
+    handleCurrentChange() {
+      this.queryList();
+    }
   },
-  created(){
-    debugger
+  created() {
+    // debugger;
     this.queryList();
   }
 };

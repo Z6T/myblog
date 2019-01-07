@@ -1,5 +1,5 @@
 <template>
-  <div class="wrapper">
+  <div class="wrapper mainbody">
     <div class="markdown-body">
       <div class="content">
         <h1>我是一个大标题</h1>
@@ -78,8 +78,6 @@ export default {
   box-sizing: border-box;
 }
 
-
-
 .art_info {
   display: flex;
 }
@@ -112,6 +110,9 @@ export default {
   cursor: pointer;
   background-color: #007aff;
   color: #fff;
+}
+h1 {
+  font-size: 34px;
 }
 </style>
 

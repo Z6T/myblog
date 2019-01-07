@@ -1,71 +1,73 @@
-<style lang='scss' scoped>
+.<style lang='scss' scoped>
+.cardarea {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+}
+
 .home-page {
-  padding: 20px;
   .yearlist {
     background-color: #fff;
     border-radius: 5px;
     padding: 20px;
-    section {
-      padding: 25px 20px 0;
-      .yeartitle-list {
-        list-style: square;
-        margin-left: 20px;
-        li {
-          margin: 14px 0;
-          &:hover {
-            list-style-type: hiragana;
-          }
-          a {
-            position: relative;
-            text-decoration: none;
-            &:hover::after {
-              width: 100%;
-              transform: rotate(0deg);
-            }
-            &::after {
-              transition: all 0.5s;
-              content: "";
-              height: 1px;
-              background: #0770fe;
-              width: 0%;
-              position: absolute;
-              left: 0%;
-              bottom: -6px;
-              transform: rotate(-20deg);
-            }
-          }
-        }
-      }
+    .text {
+      font-size: 14px;
+    }
+
+    .item {
+      margin-bottom: 18px;
+    }
+
+    .clearfix:before,
+    .clearfix:after {
+      display: table;
+      content: "";
+    }
+    .clearfix:after {
+      clear: both;
+    }
+
+    .box-card {
+      width: 480px;
+      margin: 5px 0;
     }
   }
 }
 </style>
 <template>
-  <div class="home-page" id="xxxFullScreen">
+  <div class="home-page mainbody" id="xxxFullScreen">
     <div class="yearlist">
       <Htitle>知识系列专栏</Htitle>
-      <section class="oneyear-list">
-        <h4>2018年10月</h4>
-        <ul class="yeartitle-list">
-          <li>
-            <a class="arti-title" href>《ECMAScript6入门》学习笔记之函数的扩展</a>
-          </li>
-          <li>
-            <a class="arti-title" href>《ECMAScript6入门》学习笔记之函数的扩展</a>
-          </li>
-        </ul>
-      </section>
-      <section class="oneyear-list">
-        <h4>2018年10月</h4>
-        <ul class="yeartitle-list">
-          <li>
-            <a class="arti-title" href>《ECMAScript6入门》学习笔记之函数的扩展</a>
-          </li>
-          <li>
-            <a class="arti-title" href>《ECMAScript6入门》学习笔记之函数的扩展</a>
-          </li>
-        </ul>
-      </section>
+      <div class="cardarea">
+        <el-card class="box-card">
+          <div slot="header" class="clearfix">
+            <span>卡片名称</span>
+            <el-button style="float: right; padding: 3px 0" type="text">操作按钮</el-button>
+          </div>
+          <div v-for="o in 4" :key="o" class="text item">{{'列表内容 ' + o }}</div>
+        </el-card>
+        <el-card class="box-card">
+          <div slot="header" class="clearfix">
+            <span>卡片名称</span>
+            <el-button style="float: right; padding: 3px 0" type="text">操作按钮</el-button>
+          </div>
+          <div v-for="o in 4" :key="o" class="text item">{{'列表内容 ' + o }}</div>
+        </el-card>
+        <el-card class="box-card">
+          <div slot="header" class="clearfix">
+            <span>卡片名称</span>
+            <el-button style="float: right; padding: 3px 0" type="text">操作按钮</el-button>
+          </div>
+          <div v-for="o in 4" :key="o" class="text item">{{'列表内容 ' + o }}</div>
+        </el-card>
+        <el-card class="box-card">
+          <div slot="header" class="clearfix">
+            <span>卡片名称</span>
+            <el-button style="float: right; padding: 3px 0" type="text">操作按钮</el-button>
+          </div>
+          <div v-for="o in 4" :key="o" class="text item">{{'列表内容 ' + o }}</div>
+        </el-card>
+      </div>
     </div>
   </div>
 </template>

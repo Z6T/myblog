@@ -6,7 +6,7 @@ import ClientIndex from '@/components/client/ClientIndex'
 import Home from '@/components/client/pages/Home'
 import Series from '@/components/client/pages/Series'
 import Historylist from '@/components/client/pages/Historylist'
-import Record from '@/components/client/pages/Record'
+import Record from '@/components/client/pages/ArticleType'
 import Aboutme from '@/components/client/pages/Aboutme'
 import ArticleContent from '@/components/client/pages/ArticleContent'
 /*服务端所有程序 */

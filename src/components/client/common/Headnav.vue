@@ -149,7 +149,7 @@ export default {
           path: "/historylist"
         },
         {
-          name: "随 笔",
+          name: "分 类",
           path: "/record"
         },
         {
